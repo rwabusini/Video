@@ -1,24 +1,53 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, {useState} from 'react';
+import Search from './SearchBar'
+import axios from 'axios'
+//import Results from './Results'
 
 function App() {
+  // creating state to handle text changes
+  const [text , setText] = useState({
+    input : ""
+  });
+
+  const api = "https://api.themoviedb.org/3/movie/top_rated?api_key=468a3e5868a2156306ec2772e6c28f9e&language=en-US&page=1";
+  
+  const handelTextInput = (event) => {
+    var input = event.target.value;
+    setText(prevText => {
+      return {...prevText, input: input}
+    })
+    //console.log(text.input)
+  }
+
+  const searching = (event) => {
+    if (event.key === "Enter") {
+      axios(api + "&s=" + text.input).then(({ data }) => {
+        let SearchResults = data.Search;
+        console.log(data)
+        setText(prevText => {
+          return { ...prevText, results: SearchResults }
+        })
+      });
+    }
+   
+  }
+
+  
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+      <header>
+        <h1>Movie Application</h1>
       </header>
+      <div className="searching">
+
+      <Search handelTextInput ={handelTextInput} searching ={searching}/>
+        {/* <Search handelTextInput={handelTextInput} search={search} /> */}
+
+        {/* <Results results={state.results} openPopup={openPopup} />
+
+        {(typeof state.selected.Title != "undefined") ? <Popup selected={state.selected} closePopup={closePopup} /> : false} */}
+      </div>
     </div>
   );
 }
