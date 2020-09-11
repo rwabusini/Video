@@ -3,6 +3,7 @@ import Search from './SearchBar'
 import axios from 'axios'
 import AllVideos from './allVideos';
 
+
 function App() {
   // creating state to handle text changes
   const [text , setText] = useState({
@@ -24,7 +25,7 @@ function App() {
     if (event.key === "Enter") {
       axios(api + "&query=" + text.input).then(({ data }) => {
         var SearchResults = data.results;
-        //console.log(data.results)
+       //console.log(data)
         setText(prevText => {
           return { ...prevText, results: SearchResults }
         })
@@ -33,7 +34,6 @@ function App() {
    
   }
 
-  //console.log(text.results)
 
   return (
     <div className="App">
